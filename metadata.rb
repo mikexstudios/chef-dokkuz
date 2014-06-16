@@ -4,13 +4,14 @@ maintainer_email 'fgrehm@gmail.com'
 license          'MIT'
 description      'Installs/Configures dokku'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '0.2.0'
+version          '0.2.3'
 
-supports 'ubuntu', '= 13.04'
+supports 'ubuntu', '= 14.04'
 
+# These cookbooks are so common that we do not version pin them.
 %w{apt git build-essential user sudo}.each do |dep|
   depends dep
 end
 
-depends 'nginx', '~> 2.4.4'
-depends 'docker', '>= 0.25.0'
+depends 'nginx', '~> 2.7.4'
+depends 'docker', '~> 0.34.2'
