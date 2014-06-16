@@ -1,6 +1,9 @@
-# This is essentially a chef version of https://github.com/progrium/dokku/blob/master/bootstrap.sh
-# We are doing it this way so we can allow chef to install/configure some of our dependencies
-# instead of allowing the bootstrap script to do it
+# This is essentially a chef version of: 
+# https://github.com/progrium/dokku/blob/master/bootstrap.sh
+# and
+# https://github.com/progrium/dokku/blob/master/Makefile
+# We are doing it this way so we can allow chef to install/configure some of
+# our dependencies instead of allowing the bootstrap script to do it
 
 # Cookbook deps
 %w{apt git build-essential user}.each do |dep|
@@ -12,9 +15,10 @@ end
   package dep
 end
 
+## dependencies: sshcommand pluginhook docker stack
+
 # Install sshcommand
-sshcommand_name = node['dokku']['sshcommand']['filename']
-sshcommand_path = "#{Chef::Config[:file_cache_path]}/#{sshcommand_name}"
+sshcommand_path = "#{Chef::Config[:file_cache_path]}/sshcommand"
 
 remote_file sshcommand_path do
   source node['dokku']['sshcommand']['src_url']
