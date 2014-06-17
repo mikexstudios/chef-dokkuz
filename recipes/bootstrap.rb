@@ -22,6 +22,7 @@ sshcommand_path = "#{Chef::Config[:file_cache_path]}/sshcommand"
 
 remote_file sshcommand_path do
   source node['dokku']['sshcommand']['src_url']
+  checksum '713b5bfc1ac944ce0544497f75a0dd3731196b4eb7e594e30630ea91b9a01c9d'
 end
 
 bash 'install_sshcommand' do
@@ -41,6 +42,7 @@ pluginhook_path = "#{Chef::Config[:file_cache_path]}/#{pluginhook_name}"
 
 remote_file pluginhook_path do
   source node['dokku']['pluginhook']['src_url']
+  checksum '0a9f89ad3fd12fbeed604af8c01b0f6d3ab98e273c89a5495cd877e6a46ef8f3'
 end
 
 dpkg_package pluginhook_name do
