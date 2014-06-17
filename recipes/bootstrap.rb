@@ -34,6 +34,7 @@ bash 'install_sshcommand' do
   only_if { node['dokku']['sync']['dependencies'] }
 end
 
+
 # Install pluginhook
 pluginhook_name = node['dokku']['pluginhook']['filename']
 pluginhook_path = "#{Chef::Config[:file_cache_path]}/#{pluginhook_name}"
@@ -47,17 +48,26 @@ dpkg_package pluginhook_name do
   only_if { node['dokku']['sync']['dependencies'] }
 end
 
-# Pull in aufs
-include_recipe "docker::aufs"
-
-# Create docker group with dokku as member
-group "docker" do
-  append true
-  members ['dokku']
-end
 
 # Install docker
-include_recipe "docker::package"
+
+## Setup storage driver 
+case node['docker']['storage_driver']
+when 'aufs'
+  include_recipe 'aufs'
+when 'devicemapper' #note: lack of dash
+  include_recipe 'device-mapper'
+else
+  log 'Storage driver for docker not selected!' do
+    level :warn
+  end
+end
+
+## Create docker group with dokku as member
+default['docker']['group_members'] = ['dokku', ]
+
+include_recipe 'docker' #default installation type is package
+
 
 # Buildstack
 include_recipe "dokku::buildstack"
