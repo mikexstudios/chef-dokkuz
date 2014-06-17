@@ -64,6 +64,20 @@ file File.join(node['dokku']['root'], 'VHOST') do
 end
 
 
+# Remove backup plugin since the chef cookbook should contain all information
+# needed to recreate the app.
+directory "#{node['dokku']['plugin_path']}/backup" do
+  action :delete
+end
+
+
+# Remove config plugin since any environment variables should be configured by
+# chef.
+directory "#{node['dokku']['plugin_path']}/config" do
+  action :delete
+end
+
+
 # Install user defined plugins
 node['dokku']['plugins'].each do |name, settings|
   git "#{node['dokku']['plugin_path']}/#{name}" do
