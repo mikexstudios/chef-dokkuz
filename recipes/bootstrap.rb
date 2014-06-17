@@ -89,13 +89,3 @@ bash 'install_version' do
     echo '~master ($(shell date -uIminutes))' > VERSION
   EOH
 end
-
-
-include_recipe 'dokku::apps'
-
-include_recipe "dokku::ssh_keys"
-
-# Reload nginx
-service 'nginx' do
-  action :reload
-end
