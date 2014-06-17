@@ -81,6 +81,16 @@ include_recipe "dokku::install"
 include_recipe 'dokku::plugins'
 
 
+# Install version file
+bash 'install_version' do
+  cwd node['dokku']['root']  
+  code <<-EOH
+    git describe --tags > VERSION  2> /dev/null || \
+    echo '~master ($(shell date -uIminutes))' > VERSION
+  EOH
+end
+
+
 include_recipe 'dokku::apps'
 
 include_recipe "dokku::ssh_keys"
