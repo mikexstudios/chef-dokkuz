@@ -68,6 +68,7 @@ end
 # needed to recreate the app.
 directory "#{node['dokku']['plugin_path']}/backup" do
   action :delete
+  recursive true
 end
 
 
@@ -75,6 +76,7 @@ end
 # chef.
 directory "#{node['dokku']['plugin_path']}/config" do
   action :delete
+  recursive true
 end
 
 
