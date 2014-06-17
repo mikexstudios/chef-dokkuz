@@ -83,12 +83,6 @@ include_recipe 'dokku::plugins'
 
 include_recipe 'dokku::apps'
 
-#set VHOST
-domain = node['dokku']['domain'] || node['fqdn']
-file File.join(node['dokku']['root'], 'VHOST') do
-  content domain
-end
-
 include_recipe "dokku::ssh_keys"
 
 # Reload nginx
