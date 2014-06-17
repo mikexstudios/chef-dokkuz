@@ -1,47 +1,81 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 # NOTE: Before running `vagrant up`, install the following plugins:
-# vagrant plugin install vagrant-cachier
 # vagrant plugin install vagrant-omnibus
+# vagrant plugin install vagrant-berkshelf --plugin-version '>= 2.0.1'
 
-# Test domain, change as needed
+# Dokku test domains that will be mapped to private IP of VM.
 DOKKU_DOMAIN = ENV['DOKKU_DOMAIN'] || 'dokku.me'
-# Ideally, we should use vagrant-auto_network and vagrant-hostmanager or
-# vagrant-hostupdater to automatically assign a private IP and create a
-# /etc/hosts entry for that IP. However, there is a bug in auto_network
-# that is preventing this:
-# https://github.com/adrienthebo/vagrant-auto_network/issues/2
 DOKKU_IP = ENV['DOKKU_IP'] || '10.0.0.2'
 
-Vagrant.configure('2') do |config|
-  config.cache.auto_detect = true
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Plugins
   config.omnibus.chef_version = :latest
+  config.berkshelf.enabled = true
 
-  config.vm.box = 'raring64'
-  config.vm.network :private_network, ip: DOKKU_IP
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
 
-  config.vm.provider :virtualbox do |vb, overrides|
-    overrides.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box'
-    vb.customize [ "modifyvm", :id, "--memory", 1536, "--cpus", "2" ]
-    vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
-    # Ubuntu's Raring 64-bit cloud image is set to a 32-bit Ubuntu OS type by
-    # default in Virtualbox and thus will not boot. Manually override that.
-    vb.customize ['modifyvm', :id, '--ostype', 'Ubuntu_64']
+  # Every Vagrant virtual environment requires a box to build off of.
+  config.vm.box = 'ubuntu/trusty64' #see vagrantcloud.com
+
+  # Disable automatic box update checking. If you disable this, then
+  # boxes will only be checked for updates when the user runs
+  # `vagrant box outdated`. This is not recommended.
+  # config.vm.box_check_update = false
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine. In the example below,
+  # accessing "localhost:8080" will access port 80 on the guest machine.
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  config.vm.network "private_network", ip: DOKKU_IP
+
+  # Create a public network, which generally matched to bridged network.
+  # Bridged networks make the machine appear as another physical device on
+  # your network.
+  # config.vm.network "public_network"
+
+  # If true, then any SSH connections made will enable agent forwarding.
+  # Default value: false
+  # config.ssh.forward_agent = true
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+  # Provider-specific configuration so you can fine-tune various
+  # backing providers for Vagrant. These expose provider-specific options.
+  # Example for VirtualBox:
+  #
+  config.vm.provider "virtualbox" do |vb|
+    # Don't boot with headless mode
+    # vb.gui = true
+  
+    # Use VBoxManage to customize the VM. For example to change memory:
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
+    vb.customize ["modifyvm", :id, "--cpus", "1"]
   end
 
-  # Install htop before configuring dokku so that we can SSH into the VM to
-  # keep an eye on things while they are being configured
-  config.vm.provision :shell, inline: 'sudo apt-get install -y htop'
-
-  config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = ['vendor/cookbooks']
-    chef.add_recipe "dokku::bootstrap"
+  config.vm.provision "chef_solo" do |chef|
+    #chef.cookbooks_path = "../my-recipes/cookbooks"
+    #chef.roles_path = "../my-recipes/roles"
+    #chef.data_bags_path = "../my-recipes/data_bags"
+    chef.add_recipe "dokku::install"
+    #chef.add_role "web"
+  
+    # You may also specify custom JSON attributes:
     chef.json = {
       dokku: {
         domain: DOKKU_DOMAIN,
-        plugins: {
-          postgresql: 'https://github.com/Kloadut/dokku-pg-plugin.git'
-        },
         apps: {
           hello: {
             env: { 'NAME' => 'vagrant' }
