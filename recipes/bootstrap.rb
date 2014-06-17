@@ -83,9 +83,9 @@ include_recipe 'dokku::plugins'
 
 # Install version file
 bash 'install_version' do
-  cwd node['dokku']['root']  
+  cwd "#{Chef::Config[:file_cache_path]}/dokku"
   code <<-EOH
-    git describe --tags > VERSION  2> /dev/null || \
-    echo '~master ($(shell date -uIminutes))' > VERSION
+    git describe --tags > #{node['dokku']['root']}/VERSION  2> /dev/null || \
+    echo "~master ($(date -uIminutes))" > #{node['dokku']['root']}/VERSION
   EOH
 end
