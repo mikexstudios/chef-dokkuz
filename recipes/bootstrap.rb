@@ -72,8 +72,10 @@ include_recipe 'docker' #default installation type is package
 # Install stack
 include_recipe 'dokku::buildstep'
 
-# Dokku install
+
+# Install dokku files (i.e. copyfiles)
 include_recipe "dokku::install"
+
 
 # Install nginx ahead of the plugin install so that it is
 # chef managed
