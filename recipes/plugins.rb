@@ -65,10 +65,11 @@ end
 
 
 # Install user defined plugins
-node['dokku']['plugins'].each do |plugin_name, repo_url|
-  git "#{node['dokku']['plugin_path']}/#{plugin_name}" do
-    repository repo_url
-    action :sync
+node['dokku']['plugins'].each do |name, settings|
+  git "#{node['dokku']['plugin_path']}/#{name}" do
+    repository settings['repository'] 
+    revision settings['revision'] if settings['revision']
+    action node['dokku']['sync']['plugins'] ? :sync : :checkout
   end
 end
 
