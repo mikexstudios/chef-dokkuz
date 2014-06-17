@@ -9,7 +9,7 @@ version          '0.2.3'
 supports 'ubuntu', '= 14.04'
 
 # These cookbooks are so common that we do not version pin them.
-%w{apt git build-essential user sudo}.each do |dep|
+%w{apt git build-essential user sudo ohai}.each do |dep|
   depends dep
 end
 

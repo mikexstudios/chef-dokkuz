@@ -6,7 +6,7 @@
 # our dependencies instead of allowing the bootstrap script to do it
 
 # Cookbook deps
-%w{apt git build-essential user}.each do |dep|
+%w{apt git build-essential user ohai}.each do |dep|
   include_recipe dep
 end
 
@@ -77,21 +77,10 @@ include_recipe 'dokku::buildstep'
 include_recipe "dokku::install"
 
 
-# Install nginx ahead of the plugin install so that it is
-# chef managed
-include_recipe 'nginx::repo'
-include_recipe 'nginx'
-
-# Clean up distribution configs
-file '/etc/nginx/conf.d/example_ssl.conf' do
-  action :delete
-end
-
-file '/etc/nginx/conf.d/default.conf' do
-  action :delete
-end
-
+# Install plugins
 include_recipe 'dokku::plugins'
+
+
 include_recipe 'dokku::apps'
 
 #set VHOST

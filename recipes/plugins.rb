@@ -1,9 +1,48 @@
+# Install 00_dokku-standard 
+file "#{node['dokku']['plugin_path']}/00_dokku-standard/install" do
+  action :delete
+end
+
+## NOTE: nginx plugin duplicates this for 'VHOST'
+domain = node['dokku']['domain'] || node['fqdn']
+file File.join(node['dokku']['root'], 'HOSTNAME') do
+  content domain
+  action :create_if_missing
+end
+
+## temporary hack for https://github.com/progrium/dokku/issues/82
+## redeploys all apps after a reboot
+template "/etc/init/dokku-redeploy.conf" do
+  source "plugins/00_dokku-standard/dokku-redeploy.conf"
+  action :create
+  owner 'root'
+  group 'root'
+  mode 0644
+end
+
+
 node['dokku']['plugins'].each do |plugin_name, repo_url|
   git "#{node['dokku']['plugin_path']}/#{plugin_name}" do
     repository repo_url
     action :sync
   end
 end
+
+ 
+# Install nginx ahead of the plugin install so that it is
+# chef managed
+include_recipe 'nginx::repo'
+include_recipe 'nginx'
+
+# Clean up distribution configs
+file '/etc/nginx/conf.d/example_ssl.conf' do
+  action :delete
+end
+
+file '/etc/nginx/conf.d/default.conf' do
+  action :delete
+end
+
 
 # The nginx install script does some stuff we don't want
 # nuke it and do the install manually
