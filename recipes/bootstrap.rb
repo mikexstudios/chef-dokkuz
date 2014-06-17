@@ -73,8 +73,8 @@ include_recipe 'docker' #default installation type is package
 include_recipe 'dokku::buildstep'
 
 
-# Install dokku files (i.e. copyfiles)
-include_recipe "dokku::install"
+# Install dokku files 
+include_recipe "dokku::copyfiles"
 
 
 # Install plugins

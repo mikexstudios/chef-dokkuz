@@ -1,7 +1,3 @@
-# From original Makefile:
-#     install: dependencies stack copyfiles plugins version
-# dependencies and stack have already been completed.
-# This only implements copyfiles.
 git "#{Chef::Config[:file_cache_path]}/dokku" do
   repository node['dokku']['git_repository']
   revision node['dokku']['git_revision']
