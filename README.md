@@ -101,10 +101,10 @@ used by dokku.
 
 Attribute | Description | Type | Default
 ----------|-------------|------|--------
+build_stack | Whether to use the prebuilt image or build off the git repository | Boolean | false
 image_name | The name of the image to use when importing into Docker | String | progrium/buildstep
-use_prebuilt | Whether to use the prebuilt image or build off the git repository | Boolean | true
-stack_url | The url to the buildstep git repository | String | github.com/progrium/buildstep
-prebuilt_url | The url to the prebuild docker image for the buildstep | String | https://s3.amazonaws.com/progrium-dokku/progrium_buildstep_79cf6805cf.tgz
+stack_url | The url to the buildstep git repository | String | https://github.com/progrium/buildstep
+prebuilt_url | The url to the prebuild docker image for the buildstep | String | https://github.com/progrium/buildstep/releases/download/2014-03-08/2014-03-08_429d4a9deb.tar.gz
 
 ### PluginHook Attributes
 

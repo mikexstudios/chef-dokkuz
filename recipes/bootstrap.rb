@@ -69,8 +69,8 @@ default['docker']['group_members'] = ['dokku', ]
 include_recipe 'docker' #default installation type is package
 
 
-# Buildstack
-include_recipe "dokku::buildstack"
+# Install stack
+include_recipe 'dokku::buildstep'
 
 # Dokku install
 include_recipe "dokku::install"
