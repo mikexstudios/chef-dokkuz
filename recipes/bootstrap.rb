@@ -40,7 +40,6 @@ pluginhook_path = "#{Chef::Config[:file_cache_path]}/#{pluginhook_name}"
 
 remote_file pluginhook_path do
   source node['dokku']['pluginhook']['src_url']
-  checksum node['dokku']['pluginhook']['checksum']
 end
 
 dpkg_package pluginhook_name do
