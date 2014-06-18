@@ -6,7 +6,7 @@ default['dokku']['pluginhook']['src_url'] = 'https://s3.amazonaws.com/progrium-p
 default['docker']['storage_driver'] = 'aufs' #aufs or devicemapper
 
 default['dokku']['git_repository'] = 'https://github.com/progrium/dokku.git'
-default['dokku']['git_revision'] = 'v0.2.0'
+default['dokku']['git_revision'] = 'v0.2.3'
 
 # Nginx settings for dokku
 force_default['nginx']['default_site_enabled'] = false
