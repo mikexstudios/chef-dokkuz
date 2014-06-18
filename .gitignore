@@ -4,3 +4,4 @@ vendor/cookbooks
 .ruby-version
 tmp/
 Berksfile.lock
+.vagrant/
