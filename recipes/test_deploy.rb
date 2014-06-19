@@ -91,14 +91,13 @@ Dir.glob("#{test_dir}/*").each do |app_path|
   # Get the url of app
   # We place it inside of a ruby_block so that this command is run after the
   # above bash command completes.
-  # NOTE: Variables set inside ruby_block cannot be accessed outside of the 
-  # block. Set an environment variable as a workaround.
+  # NOTE: The problem is that app_url variable does not persist outside of
+  # the ruby_block, so it is difficult to do further testing to verify that
+  # the app is deployed correctly.
   ruby_block "get_app_url_#{app_name}" do
     block do
       app_url = `dokku url #{remote_app_name}`
-      log "App URL: #{app_url}" do
-        level :info
-      end
+      puts "App URL: #{app_url}"
     end
   end
 
