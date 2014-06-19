@@ -1,12 +1,16 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 # NOTE: Before running `vagrant up`, install the following plugins:
-# vagrant plugin install vagrant-omnibus
+# vagrant plugin install vagrant-omnibus (required to install chef server)
 # vagrant plugin install vagrant-berkshelf --plugin-version '>= 2.0.1'
 
 # Dokku test domains that will be mapped to private IP of VM.
-DOKKU_DOMAIN = ENV['DOKKU_DOMAIN'] || 'dokku.me'
 DOKKU_IP = ENV['DOKKU_IP'] || '10.0.0.2'
+# We use xip.io to automatically create wildcard (*.10.0.0.2.xip.io) 
+# subdomains that point to a private IP. This is important because
+# wildcard subdomains cannot be achieved locally without running a DNS
+# server (can't do it with /etc/hosts).
+DOKKU_DOMAIN = ENV['DOKKU_DOMAIN'] || "#{DOKKU_IP}.xip.io"
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
@@ -16,17 +20,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.omnibus.chef_version = :latest
   config.berkshelf.enabled = true
 
-  # All Vagrant configuration is done here. The most common configuration
-  # options are documented and commented below. For a complete reference,
-  # please see the online documentation at vagrantup.com.
-
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = 'ubuntu/trusty64' #see vagrantcloud.com
-
-  # Disable automatic box update checking. If you disable this, then
-  # boxes will only be checked for updates when the user runs
-  # `vagrant box outdated`. This is not recommended.
-  # config.vm.box_check_update = false
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -35,7 +30,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  config.vm.network "private_network", ip: DOKKU_IP
+  config.vm.network 'private_network', ip: DOKKU_IP
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -52,25 +47,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
 
-  # Provider-specific configuration so you can fine-tune various
-  # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
-  #
-  config.vm.provider "virtualbox" do |vb|
+  config.vm.provider 'virtualbox' do |vb|
     # Don't boot with headless mode
     # vb.gui = true
   
     # Use VBoxManage to customize the VM. For example to change memory:
-    vb.customize ["modifyvm", :id, "--memory", "1024"]
-    vb.customize ["modifyvm", :id, "--cpus", "1"]
+    vb.customize ['modifyvm', :id, '--memory', '1024']
+    vb.customize ['modifyvm', :id, '--cpus', '1']
   end
 
-  config.vm.provision "chef_solo" do |chef|
-    #chef.cookbooks_path = "../my-recipes/cookbooks"
-    #chef.roles_path = "../my-recipes/roles"
-    #chef.data_bags_path = "../my-recipes/data_bags"
-    chef.add_recipe "dokku::install"
-    #chef.add_role "web"
+  config.vm.provision 'chef_solo' do |chef|
+    #chef.cookbooks_path = '../my-recipes/cookbooks'
+    #chef.roles_path = '../my-recipes/roles'
+    #chef.data_bags_path = '../my-recipes/data_bags'
+    chef.add_recipe 'dokku::install'
+    #chef.add_recipe 'dokku::test_deploy'
+    #chef.add_role 'web'
   
     # You may also specify custom JSON attributes:
     chef.json = {
