@@ -5,3 +5,5 @@ vendor/cookbooks
 tmp/
 Berksfile.lock
 .vagrant/
+.kitchen/
+.kitchen.local.yml
