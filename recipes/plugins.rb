@@ -7,7 +7,6 @@ end
 domain = node['dokku']['domain'] || node['fqdn']
 file File.join(node['dokku']['root'], 'HOSTNAME') do
   content domain
-  action :create_if_missing
 end
 
 ## temporary hack for https://github.com/progrium/dokku/issues/82
@@ -50,7 +49,6 @@ end
 
 template "/etc/nginx/conf.d/dokku.conf" do
   source 'plugins/nginx-vhosts/dokku.conf.erb'
-  action :create_if_missing
   owner 'root'
   group 'root'
   mode 0644
@@ -60,7 +58,6 @@ end
 domain = node['dokku']['domain'] || node['fqdn']
 file File.join(node['dokku']['root'], 'VHOST') do
   content domain
-  action :create_if_missing
 end
 
 
