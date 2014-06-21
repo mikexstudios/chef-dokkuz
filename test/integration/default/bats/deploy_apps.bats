@@ -7,6 +7,7 @@ TEST_APPS_PATH='/tmp/dokku-test/apps'
 
 push_app() {
   APP_NAME="$1"
+  check_skip $APP_NAME
   DOKKU_APP_NAME="test-$APP_NAME"
   APP_PATH="$TEST_APPS_PATH/$APP_NAME"
   cd $APP_PATH
@@ -17,6 +18,7 @@ push_app() {
 
 check_deploy() {
   APP_NAME="$1"
+  check_skip $APP_NAME
   DOKKU_APP_NAME="test-$APP_NAME"
   APP_PATH="$TEST_APPS_PATH/$APP_NAME"
   APP_URL=`dokku url $DOKKU_APP_NAME`
@@ -27,9 +29,18 @@ check_deploy() {
 
 delete_app() {
   APP_NAME="$1"
+  check_skip $APP_NAME
   DOKKU_APP_NAME="test-$APP_NAME"
   run dokku delete $DOKKU_APP_NAME
   [ "$status" -eq 0 ]
+}
+
+check_skip() {
+  APP_NAME="$1"
+  APP_PATH="$TEST_APPS_PATH/$APP_NAME"
+  if [ ! -d $APP_PATH ]; then
+    skip 'app not found'
+  fi
 }
 
 # Unfortunately, bats does not support dynamic generation of tests because it
@@ -37,54 +48,42 @@ delete_app() {
 # These tests cannot be condensed to single lines because of preprocessing.
 
 @test 'push gitsubmodules' { 
-  skip
   push_app 'gitsubmodules' 
 }
 @test 'get output gitsubmodules' { 
-  skip
   check_deploy 'gitsubmodules' 
 }
 @test 'delete gitsubmodules' {
-  skip
   delete_app 'gitsubmodules' 
 }
 
 @test 'push go' { 
-  skip
   push_app 'go' 
 }
 @test 'get output go' { 
-  skip
   check_deploy 'go' 
 }
 @test 'delete go' { 
-  skip
   delete_app 'go' 
 }
 
 @test 'push java' { 
-  skip
   push_app 'java' 
 }
 @test 'get output java' { 
-  skip
   check_deploy 'java' 
 }
 @test 'delete java' { 
-  skip
   delete_app 'java' 
 }
 
 @test 'push multi' { 
-  skip
   push_app 'multi' 
 }
 @test 'get output multi' { 
-  skip
   check_deploy 'multi' 
 }
 @test 'delete multi' { 
-  skip
   delete_app 'multi'
 }
 
@@ -99,15 +98,12 @@ delete_app() {
 }
 
 @test 'push php' { 
-  skip
   push_app 'php' 
 }
 @test 'get output php' { 
-  skip
   check_deploy 'php' 
 }
 @test 'delete php' { 
-  skip
   delete_app 'php' 
 }
 

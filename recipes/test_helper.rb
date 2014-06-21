@@ -40,29 +40,7 @@ git dokku_src do
   revision node['dokku']['git_revision']
   action :checkout
 end
-
-# Create a known test directory outside of the cache path
-dokku_test_path = '/tmp/dokku-test'
-directory dokku_test_path do 
-  action :delete
-  recursive true
-  owner 'root'
-  group 'root'
-end
-directory dokku_test_path do
-  action :create
-end
-
-# Copy the test apps 
-execute "cp -r #{File.join(dokku_src, 'tests/apps')} ." do
-  user 'root'
-  group 'root'
-  cwd dokku_test_path
-end
-
-
-# For each test app, initialize as a git repository
-
+ 
 ## Set root's git email and name to prevent warning message
 bash 'test_helper_git_config_user' do
   code <<-EOH
@@ -73,9 +51,37 @@ bash 'test_helper_git_config_user' do
   group 'root'
 end
 
-Dir.glob("#{dokku_test_path}/apps/*").each do |app_path|
-  app_name = File.basename(app_path)
+# Create a known test directory outside of the cache path
+dokku_test_path = '/tmp/dokku-test'
+dokku_test_apps_path = File.join(dokku_test_path, 'apps')
+directory dokku_test_path do 
+  action :delete
+  recursive true
+  owner 'root'
+  group 'root'
+end
+directory dokku_test_apps_path do
+  action :create
+  recursive true
+end
+
+
+# For each test app, copy files and initialize as a git repository
+Dir.glob("#{dokku_src}/tests/apps/*").each do |orig_app_path|
+  app_name = File.basename(orig_app_path)
+  app_path = File.join(dokku_test_apps_path, app_name)
   remote_app_name = "test-#{app_name}" #prevent conflict with existing apps
+   
+  # Only run test if the app is defined in our list of apps to test.
+  next if not node['dokku']['test_deploy']['apps'].include? app_name and
+          not node['dokku']['test_deploy']['apps'] == '*'
+   
+  # Copy the test app
+  execute "cp -r #{orig_app_path} ." do
+    user 'root'
+    group 'root'
+    cwd dokku_test_apps_path
+  end
   
   # Clean up any old deployed test apps
   execute "dokku delete #{remote_app_name} || true" do
