@@ -17,7 +17,7 @@ suites:
   - name: default
     run_list:
       - recipe[dokku::install]
-      - recipe[dokku::test_helper]
+      - recipe[dokku::test_helper] #required to setup test environment
     attributes:
       dokku:
         domain: <%= ENV['DOKKU_DOMAIN'] || '10.0.0.2.xip.io' %>
