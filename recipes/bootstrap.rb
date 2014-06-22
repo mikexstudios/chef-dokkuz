@@ -30,9 +30,14 @@ bash 'install_sshcommand' do
   code <<-EOH
     cp sshcommand /usr/local/bin
     chmod +x /usr/local/bin/sshcommand
-    sshcommand create dokku /usr/local/bin/dokku
   EOH
   only_if { node['dokku']['sync']['dependencies'] }
+end
+
+dokku_sshcommand 'create user dokku' do
+  action :create
+  user 'dokku'
+  command '/usr/local/bin/dokku'
 end
 
 

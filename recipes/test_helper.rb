@@ -20,13 +20,16 @@ execute "ssh-keygen -t rsa -N '' -f 'id_rsa'" do
   creates File.join(root_ssh_dir, 'id_rsa')
 end
 
-bash 'test_helper_set_sshcommand' do
-  user 'root'
-  group 'root'
-  code <<-EOH
-    sshcommand acl-remove dokku root
-    cat /root/.ssh/id_rsa.pub | sshcommand acl-add dokku root
-  EOH
+dokku_sshcommand "acl-remove root from user dokku" do
+  action :acl_remove
+  user 'dokku'
+  identifier 'root'
+end
+dokku_sshcommand "acl-add root to user dokku" do
+  action :acl_add
+  user 'dokku'
+  identifier 'root'
+  ssh_pub_key '/root/.ssh/id_rsa.pub'
 end
  
 # Add localhost to known_hosts entry so that git push does not fail
