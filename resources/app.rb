@@ -1,4 +1,4 @@
-actions :build, :release, :deploy, :cleanup
+actions :build, :release, :deploy, :delete
 
 #default_action :fill_in
 
