@@ -3,11 +3,22 @@ def whyrun_supported?
   true
 end
 
+action :create do
+  converge_by("Create #{new_resource}") do
+    directory File.join(node['dokku']['root'], new_resource.app, 'cache') do
+      action :create
+      recursive true
+      owner 'dokku'
+      group 'dokku'
+    end
+  end
+end
+
 action :build do
   converge_by("Build #{new_resource}") do
     execute "build app #{new_resource.app}" do
-      cwd File.join(node['dokku']['root'], new_resource.app)
-      command "git archive master | dokku build #{new_resource.app}"
+      cwd new_resource.source_path
+      command "tar cC . . | dokku build #{new_resource.app}"
       user 'dokku'
     end
   end

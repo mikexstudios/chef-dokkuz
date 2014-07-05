@@ -103,4 +103,13 @@ Dir.glob("#{dokku_src}/tests/apps/*").each do |orig_app_path|
     user 'root'
     group 'root'
   end
+
+  # Deploy app using dokku LWRPs.
+  # NOTE: git push deploys are also tested, but actual deployment happens in
+  #       deploy_apps.bats kitchen test script.
+  lwrp_app_name = "lwrp-#{app_name}"
+  dokku_app lwrp_app_name do
+    action [:create, :build, :release, :deploy]
+    source_path app_path
+  end
 end
