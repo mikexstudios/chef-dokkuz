@@ -36,58 +36,58 @@ check_skip() {
 # preprocesses "@test" statements. So we must create test stubs for each app.
 # These tests cannot be condensed to single lines because of preprocessing.
 
-@test 'get output gitsubmodules' { 
+@test 'LWRP deploy: get output gitsubmodules' { 
   check_deploy 'gitsubmodules' 
 }
-@test 'delete gitsubmodules' {
+@test 'LWRP deploy: delete gitsubmodules' {
   delete_app 'gitsubmodules' 
 }
 
-@test 'get output go' { 
+@test 'LWRP deploy: get output go' { 
   check_deploy 'go' 
 }
-@test 'delete go' { 
+@test 'LWRP deploy: delete go' { 
   delete_app 'go' 
 }
 
-@test 'get output java' { 
+@test 'LWRP deploy: get output java' { 
   check_deploy 'java' 
 }
-@test 'delete java' { 
+@test 'LWRP deploy: delete java' { 
   delete_app 'java' 
 }
 
-@test 'get output multi' { 
+@test 'LWRP deploy: get output multi' { 
   check_deploy 'multi' 
 }
-@test 'delete multi' { 
+@test 'LWRP deploy: delete multi' { 
   delete_app 'multi'
 }
 
-@test 'get output nodejs-express' { 
+@test 'LWRP deploy: get output nodejs-express' { 
   check_deploy 'nodejs-express' 
 }
-@test 'delete nodejs-express' { 
+@test 'LWRP deploy: delete nodejs-express' { 
   delete_app 'nodejs-express' 
 }
 
-@test 'get output php' { 
+@test 'LWRP deploy: get output php' { 
   check_deploy 'php' 
 }
-@test 'delete php' { 
+@test 'LWRP deploy: delete php' { 
   delete_app 'php' 
 }
 
-@test 'get output python-flask' { 
+@test 'LWRP deploy: get output python-flask' { 
   check_deploy 'python-flask' 
 }
-@test 'delete python-flask' { 
+@test 'LWRP deploy: delete python-flask' { 
   delete_app 'python-flask' 
 }
 
-@test 'get output static' { 
+@test 'LWRP deploy: get output static' { 
   check_deploy 'static' 
 }
-@test 'delete static' { 
+@test 'LWRP deploy: delete static' { 
   delete_app 'static' 
 }

@@ -47,82 +47,82 @@ check_skip() {
 # preprocesses "@test" statements. So we must create test stubs for each app.
 # These tests cannot be condensed to single lines because of preprocessing.
 
-@test 'push gitsubmodules' { 
+@test 'git deploy: push gitsubmodules' { 
   push_app 'gitsubmodules' 
 }
-@test 'get output gitsubmodules' { 
+@test 'git deploy: get output gitsubmodules' { 
   check_deploy 'gitsubmodules' 
 }
-@test 'delete gitsubmodules' {
+@test 'git deploy: delete gitsubmodules' {
   delete_app 'gitsubmodules' 
 }
 
-@test 'push go' { 
+@test 'git deploy: push go' { 
   push_app 'go' 
 }
-@test 'get output go' { 
+@test 'git deploy: get output go' { 
   check_deploy 'go' 
 }
-@test 'delete go' { 
+@test 'git deploy: delete go' { 
   delete_app 'go' 
 }
 
-@test 'push java' { 
+@test 'git deploy: push java' { 
   push_app 'java' 
 }
-@test 'get output java' { 
+@test 'git deploy: get output java' { 
   check_deploy 'java' 
 }
-@test 'delete java' { 
+@test 'git deploy: delete java' { 
   delete_app 'java' 
 }
 
-@test 'push multi' { 
+@test 'git deploy: push multi' { 
   push_app 'multi' 
 }
-@test 'get output multi' { 
+@test 'git deploy: get output multi' { 
   check_deploy 'multi' 
 }
-@test 'delete multi' { 
+@test 'git deploy: delete multi' { 
   delete_app 'multi'
 }
 
-@test 'push nodejs-express' { 
+@test 'git deploy: push nodejs-express' { 
   push_app 'nodejs-express' 
 }
-@test 'get output nodejs-express' { 
+@test 'git deploy: get output nodejs-express' { 
   check_deploy 'nodejs-express' 
 }
-@test 'delete nodejs-express' { 
+@test 'git deploy: delete nodejs-express' { 
   delete_app 'nodejs-express' 
 }
 
-@test 'push php' { 
+@test 'git deploy: push php' { 
   push_app 'php' 
 }
-@test 'get output php' { 
+@test 'git deploy: get output php' { 
   check_deploy 'php' 
 }
-@test 'delete php' { 
+@test 'git deploy: delete php' { 
   delete_app 'php' 
 }
 
-@test 'push python-flask' { 
+@test 'git deploy: push python-flask' { 
   push_app 'python-flask' 
 }
-@test 'get output python-flask' { 
+@test 'git deploy: get output python-flask' { 
   check_deploy 'python-flask' 
 }
-@test 'delete python-flask' { 
+@test 'git deploy: delete python-flask' { 
   delete_app 'python-flask' 
 }
 
-@test 'push static' { 
+@test 'git deploy: push static' { 
   push_app 'static' 
 }
-@test 'get output static' { 
+@test 'git deploy: get output static' { 
   check_deploy 'static' 
 }
-@test 'delete static' { 
+@test 'git deploy: delete static' { 
   delete_app 'static' 
 }
