@@ -89,7 +89,6 @@ Dir.glob("#{dokku_src}/tests/apps/*").each do |orig_app_path|
   # Clean up any old deployed test apps
   execute "dokku delete #{remote_app_name} || true" do
     user 'root'
-    group 'root'
   end
   
   bash "test_helper_gitadd_#{app_name}" do
@@ -107,9 +106,18 @@ Dir.glob("#{dokku_src}/tests/apps/*").each do |orig_app_path|
   # Deploy app using dokku LWRPs.
   # NOTE: git push deploys are also tested, but actual deployment happens in
   #       deploy_apps.bats kitchen test script.
+  # Clean up any old deployed test apps
   lwrp_app_name = "lwrp-#{app_name}"
+  execute "dokku delete #{lwrp_app_name} || true" do
+    user 'root'
+  end
   dokku_app lwrp_app_name do
     action [:create, :build, :release, :deploy]
     source_path app_path
   end
+end
+
+# TODO: Remove the need to manually call cleanup.
+dokku_dokku 'cleanup apps' do
+  action :cleanup
 end

@@ -5,9 +5,13 @@ end
 
 action :create do
   converge_by("Create #{new_resource}") do
+    directory ::File.join(node['dokku']['root'], new_resource.app) do
+      action :create
+      owner 'dokku'
+      group 'dokku'
+    end
     directory ::File.join(node['dokku']['root'], new_resource.app, 'cache') do
       action :create
-      recursive true
       owner 'dokku'
       group 'dokku'
     end
@@ -19,7 +23,7 @@ action :build do
     execute "build app #{new_resource.app}" do
       cwd new_resource.source_path
       command "tar cC . . | dokku build #{new_resource.app}"
-      user 'root'
+      user 'root' #can't run as 'dokku' user since interacts with docker
     end
   end
 end
@@ -45,7 +49,7 @@ end
 action :delete do
   converge_by("Delete #{new_resource}") do
     execute "delete app #{new_resource.app}" do
-      command "dokku delete #{new_resource.app}"
+      command "dokku delete #{new_resource.app}; dokku cleanup"
       user 'root'
     end
   end

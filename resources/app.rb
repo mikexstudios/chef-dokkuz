@@ -1,6 +1,6 @@
 actions :create, :build, :release, :deploy, :delete
 
-#default_action :fill_in
+default_action [:create, :build, :release, :deploy]
 
 #TODO: Use regex matchers
 attribute :app, :name_attribute => true, :required => true, :kind_of => String
