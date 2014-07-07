@@ -54,3 +54,12 @@ action :delete do
     end
   end
 end
+
+action :run do
+  converge_by("Run command on #{new_resource}") do
+    execute "run command on app #{new_resource.app}" do
+      command "dokku run #{new_resource.app} #{new_resource.command}"
+      user 'root'
+    end
+  end
+end

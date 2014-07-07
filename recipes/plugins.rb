@@ -86,6 +86,9 @@ node['dokku']['plugins'].each do |name, settings|
   end
 end
 
+# TODO: Manually call each plugin's install hook in the above loop and provide
+# the option to override it instead of calling all of the plugin installs at
+# once.
 bash "dokku_plugins_install" do
   cwd node['dokku']['plugin_path']
   code <<-EOH
