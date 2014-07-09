@@ -13,5 +13,5 @@ supports 'ubuntu', '= 14.04'
   depends dep
 end
 
-depends 'docker', '~> 0.34.2'
+depends 'docker', '~> 0.35.2'
 depends 'nginx', '~> 2.7.4'
