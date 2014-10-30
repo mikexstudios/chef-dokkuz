@@ -1,0 +1,9 @@
+.chef
+vendor/cookbooks
+.bundle
+.ruby-version
+tmp/
+Berksfile.lock
+.vagrant/
+.kitchen/
+.kitchen.local.yml
