@@ -9,6 +9,14 @@ end
 end
 
 
+# Create a dokku user (to have /home/dokku)
+user 'dokku' do
+  shell '/bin/false'
+  home '/home/dokku'
+  group 'dokku'
+end
+
+
 # Install pluginhook
 pluginhook_name = node['dokku']['pluginhook']['filename']
 pluginhook_path = "#{Chef::Config[:file_cache_path]}/#{pluginhook_name}"
@@ -56,6 +64,7 @@ end
 
 
 # Install dokku files 
+# TODO: Eliminate dependency on dokku completely.
 git "#{Chef::Config[:file_cache_path]}/dokku" do
   repository node['dokku']['git_repository']
   revision node['dokku']['git_revision']
