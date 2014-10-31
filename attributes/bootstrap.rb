@@ -16,3 +16,11 @@ default['dokku']['buildstep']['image_name'] = 'progrium/buildstep'
 default['dokku']['buildstep']['stack_url'] = 'https://github.com/progrium/buildstep.git'
 default['dokku']['buildstep']['stack_tag'] = '2014-03-08'
 default['dokku']['buildstep']['prebuilt_url'] = 'https://github.com/progrium/buildstep/releases/download/2014-03-08/2014-03-08_429d4a9deb.tar.gz'
+
+# Plugins
+## Corresponds to the $PLUGIN_PATH variable
+default['dokku']['plugin_path'] = '/var/lib/dokku/plugins'
+##  Hash, key is plugin name, value is a hash of 'repository' and 'revision'
+default['dokku']['plugins'] = {}
+## Needed for the nginx reload script
+force_default['authorization']['sudo']['include_sudoers_d'] = true

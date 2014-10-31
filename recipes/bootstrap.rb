@@ -76,7 +76,7 @@ end
 
 
 # Install plugins
-include_recipe 'dokku::plugins'
+include_recipe 'dokku::install_plugins'
 
 
 # Install version file
