@@ -42,7 +42,7 @@ file '/etc/nginx/conf.d/default.conf' do
 end
 
 sudo 'dokku-nginx-reload' do
-  user '%dokku'
+  user 'root'
   commands ['/etc/init.d/nginx reload']
   nopasswd true
 end

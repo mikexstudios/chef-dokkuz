@@ -36,10 +36,6 @@ else
   end
 end
 
-## Create docker group with dokku as member
-## TODO: This may no longer be needed.
-node.default['docker']['group_members'] = ['dokku', ]
-
 include_recipe 'docker' #default installation type is package
 
 
