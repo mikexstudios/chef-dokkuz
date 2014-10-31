@@ -77,6 +77,13 @@ directory "#{node['dokku']['plugin_path']}/config" do
 end
 
 
+# Remove git plugin since all deploys will occur using LWRPs
+directory "#{node['dokku']['plugin_path']}/git" do
+  action :delete
+  recursive true
+end
+
+
 # Install user defined plugins
 node['dokku']['plugins'].each do |name, settings|
   git "#{node['dokku']['plugin_path']}/#{name}" do
