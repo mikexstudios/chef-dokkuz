@@ -1,10 +1,3 @@
-# This is essentially a chef version of: 
-# https://github.com/progrium/dokku/blob/master/bootstrap.sh
-# and
-# https://github.com/progrium/dokku/blob/master/Makefile
-# We are doing it this way so we can allow chef to install/configure some of
-# our dependencies instead of allowing the bootstrap script to do it
-
 # Cookbook deps
 %w{apt git build-essential user ohai}.each do |dep|
   include_recipe dep
@@ -15,31 +8,7 @@ end
   package dep
 end
 
-## dependencies: sshcommand pluginhook docker stack
-
-# Install sshcommand
-sshcommand_path = "#{Chef::Config[:file_cache_path]}/sshcommand"
-
-remote_file sshcommand_path do
-  source node['dokku']['sshcommand']['src_url']
-  checksum '713b5bfc1ac944ce0544497f75a0dd3731196b4eb7e594e30630ea91b9a01c9d'
-end
-
-bash 'install_sshcommand' do
-  cwd ::File.dirname(sshcommand_path)
-  code <<-EOH
-    cp sshcommand /usr/local/bin
-    chmod +x /usr/local/bin/sshcommand
-  EOH
-  only_if { node['dokku']['sync']['dependencies'] }
-end
-
-dokku_sshcommand 'create user dokku' do
-  action :create
-  user 'dokku'
-  command '/usr/local/bin/dokku'
-end
-
+## dependencies: pluginhook docker stack
 
 # Install pluginhook
 pluginhook_name = node['dokku']['pluginhook']['filename']
@@ -57,8 +26,6 @@ end
 
 
 # Install docker
-
-## Setup storage driver 
 case node['docker']['storage_driver']
 when 'aufs'
   include_recipe 'aufs'
@@ -71,6 +38,7 @@ else
 end
 
 ## Create docker group with dokku as member
+## TODO: This may no longer be needed.
 node.default['docker']['group_members'] = ['dokku', ]
 
 include_recipe 'docker' #default installation type is package
