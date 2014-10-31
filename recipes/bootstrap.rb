@@ -8,7 +8,6 @@ end
   package dep
 end
 
-## dependencies: pluginhook docker stack
 
 # Install pluginhook
 pluginhook_name = node['dokku']['pluginhook']['filename']
@@ -44,8 +43,20 @@ node.default['docker']['group_members'] = ['dokku', ]
 include_recipe 'docker' #default installation type is package
 
 
-# Install stack
-include_recipe 'dokku::buildstep'
+# Install stack using buildstep. Try to use pre-built docker image
+# when possible.
+if node['dokku']['buildstep']['build_stack']
+  docker_image node['dokku']['buildstep']['image_name'] do
+    source node['dokku']['buildstep']['stack_url']
+    tag node['dokku']['buildstep']['stack_tag']
+    action :build_if_missing
+  end
+else
+  docker_image node['dokku']['buildstep']['image_name'] do
+    source node['dokku']['buildstep']['prebuilt_url']
+    action :import
+  end
+end
 
 
 # Install dokku files 
